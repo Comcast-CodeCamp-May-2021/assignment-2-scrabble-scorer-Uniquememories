@@ -43,7 +43,7 @@ const simpleScorePointStructure = {
   1: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 };
 
-function simpleScorer(word) {
+function simpleScore(word) {
   word = word.toUpperCase();
   let numericalScore = 0; 
   for (let i = 0; i < word.length; i++) {
@@ -63,7 +63,7 @@ const vowelBonusScoreStructure = {
   3: ['A', 'E', 'I', 'O', 'U']
 }
 
-function vowelBonusScorer(word) {
+function vowelBonusScore(word) {
   word = word.toUpperCase();
   let score = 0;
   for (let i = 0; i < word.length; i++) {
@@ -78,38 +78,39 @@ function vowelBonusScorer(word) {
 
 
 
-function scrabbleScore(word) {
-  word = word.toUpperCase();
+function scrabbleScore(word, pointObject) {
+  word = word.toLowerCase();
   // console.log(word);
   let finalPoints = 0;
   for (let i = 0; i < word.length; i++) {
-	  for (const pointValue in newPointStructure) {
+	  for (let pointValue in pointObject) {
+      pointValue = pointValue.toLowerCase()
 		  if (pointValue.includes(word[i])) {
-        finalPoints += Number(newPointStructure[pointValue]);
+        finalPoints += Number(pointObject[pointValue]);
       }
     }
   }
-  return finalPoints; //Is this correct????
+  return finalPoints; 
 }
 
 
-let simpleScore = {
+let simple = {
     name: "Simple",
     description: "Each letter is worth 1 point.",
-    scoringFunction: simpleScorer
+    scoringFunction: simpleScore
   };
-let vowelBonusScore = {
+let vowelBonus = {
     name: "Vowel Bonus",
     description: "Vowels are 3 pts, consonants are 1 pt.",
-    scoringFunction: vowelBonusScorer
+    scoringFunction: vowelBonusScore
   };
-let oldScrabbleScore = {
+let oldScrabble = {
     name: "Scrabble",
     description: "The traditional scoring algorithm.",
-    scoringFunction: scrabbleScore //THIS IS WHERE YOU LEFT OFF... when I change this to flow through scrabbleScore, I begin to get errors!!!!!!
+    scoringFunction: scrabbleScore 
   };
 
-const scoringAlgorithms = [simpleScore, vowelBonusScore, oldScrabbleScore];
+const scoringAlgorithms = [simple, vowelBonus, oldScrabble];
 
 // console.log(scoringAlgorithms);
 
@@ -143,6 +144,7 @@ function transform(oldVsNew) {
     let newScore = oldVsNew[item];
       // console.log({newScore});
       for(let i = 0; i < newScore.length; i++) {
+        newScore[i] = newScore[i].toLowerCase()
         newStructure[newScore[i]] = Number(item);
       }
   }
